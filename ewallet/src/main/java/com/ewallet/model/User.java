@@ -27,7 +27,7 @@ public class User {
     private String phone;
 
     @NotBlank
-    @Column(nullable = false, length = 6)
+    @Column(nullable = false, length = 60)
     private String pin;
 
     @Column(nullable = false, precision = 15, scale = 2)

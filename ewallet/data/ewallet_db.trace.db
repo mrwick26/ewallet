@@ -1,3 +1,16 @@
-2026-06-29 12:43:00.920371Z jdbc[3]: exception
-org.h2.jdbc.JdbcSQLDataException: Value too long for column "PIN CHARACTER VARYING(6)": "'$2a$10$juxmrDRY309NiU3tULrwT.ruPX.h4GiJPXEp38rqCR0dPC.rorw4a' (60)"; SQL statement:
-insert into users (is_active,balance,created_at,email,full_name,phone,pin,id) values (?,?,?,?,?,?,?,default) [22001-224]
+2026-06-29 12:50:01.101998Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2026-06-29 12:50:57.994689Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2026-06-29 12:51:11.787159Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2026-06-29 12:51:18.477118Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2026-06-29 12:51:43.581684Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2026-06-29 12:51:43.583186Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2026-06-29 12:52:10.402864Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2026-06-29 12:52:10.405109Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
