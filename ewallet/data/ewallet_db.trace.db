@@ -1,0 +1,3 @@
+2026-06-29 12:43:00.920371Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "PIN CHARACTER VARYING(6)": "'$2a$10$juxmrDRY309NiU3tULrwT.ruPX.h4GiJPXEp38rqCR0dPC.rorw4a' (60)"; SQL statement:
+insert into users (is_active,balance,created_at,email,full_name,phone,pin,id) values (?,?,?,?,?,?,?,default) [22001-224]
