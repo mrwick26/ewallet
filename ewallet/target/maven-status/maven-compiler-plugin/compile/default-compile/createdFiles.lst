@@ -1,0 +1,13 @@
+com/ewallet/repository/UserRepository.class
+com/ewallet/model/Transaction.class
+com/ewallet/controller/WalletController.class
+com/ewallet/model/User.class
+com/ewallet/EWalletApplication.class
+com/ewallet/model/Transaction$Status.class
+com/ewallet/SecurityConfig.class
+com/ewallet/service/WalletOperation.class
+com/ewallet/model/Transaction$Type.class
+com/ewallet/service/CashInOperation.class
+com/ewallet/service/WalletService.class
+com/ewallet/repository/TransactionRepository.class
+com/ewallet/service/CashOutOperation.class

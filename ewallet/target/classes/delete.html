@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gee.KasZsx — Delete Account</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #1a0000 0%, #3d0000 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .card {
+      background: #fff; border-radius: 20px; padding: 44px 40px;
+      width: 100%; max-width: 440px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    .warning-icon { font-size: 4rem; margin-bottom: 16px; }
+    h2 { font-size: 1.6rem; color: #dc2626; font-weight: 800; margin-bottom: 10px; }
+    p { color: #555; font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px; }
+    .user-info-box {
+      background: #fff5f5; border: 1.5px solid #fecaca; border-radius: 10px;
+      padding: 14px; margin-bottom: 24px; text-align: left;
+    }
+    .user-info-box div { font-size: 0.88rem; color: #555; padding: 4px 0; }
+    .user-info-box strong { color: #222; }
+    .confirm-row { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; text-align: left; }
+    .confirm-row input[type=checkbox] { width: 18px; height: 18px; flex-shrink: 0; cursor: pointer; }
+    .confirm-row label { font-size: 0.88rem; color: #555; cursor: pointer; }
+    .btn-delete {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #dc2626, #991b1b);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 700; cursor: pointer; margin-bottom: 12px;
+      opacity: 0.5; pointer-events: none; transition: all 0.2s;
+    }
+    .btn-delete.enabled { opacity: 1; pointer-events: all; }
+    .btn-cancel {
+      width: 100%; padding: 12px;
+      background: #f5f5f5; color: #555; border: 1.5px solid #ddd;
+      border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      text-decoration: none; display: block;
+    }
+    .btn-cancel:hover { background: #eee; }
+    .msg { margin-top: 14px; font-size: 0.88rem; padding: 10px; border-radius: 8px; }
+    .msg.error { background: #fee2e2; color: #dc2626; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="warning-icon">⛔</div>
+  <h2>Delete Account</h2>
+  <p>This action is <strong>permanent and irreversible</strong>. All your wallet data, balance, and transaction history will be permanently erased.</p>
+
+  <div class="user-info-box">
+    <div>Username: <strong id="del-username">—</strong></div>
+    <div>Balance: <strong id="del-balance" style="color:#dc2626;">—</strong></div>
+    <div>Transactions: <strong id="del-txcount">—</strong></div>
+  </div>
+
+  <div class="confirm-row">
+    <input type="checkbox" id="confirm-check" onchange="toggleBtn()"/>
+    <label for="confirm-check">I understand this will permanently delete my account and I cannot undo this action.</label>
+  </div>
+
+  <button class="btn-delete" id="del-btn" onclick="deleteAccount()">Delete My Account Forever</button>
+  <a href="/profile" class="btn-cancel">Cancel — Go Back to Profile</a>
+  <div class="msg" id="msg" style="display:none"></div>
+</div>
+
+<script>
+function toggleBtn() {
+  const btn = document.getElementById('del-btn');
+  btn.classList.toggle('enabled', document.getElementById('confirm-check').checked);
+}
+
+async function loadUser() {
+  const r = await fetch('/api/me');
+  if (!r.ok) { window.location.href='/'; return; }
+  const u = await r.json();
+  document.getElementById('del-username').textContent = u.username;
+  document.getElementById('del-balance').textContent = '₱' + parseFloat(u.balance).toFixed(2);
+
+  const tr = await fetch('/api/transactions');
+  const txs = await tr.json();
+  document.getElementById('del-txcount').textContent = txs.length + ' transaction(s)';
+}
+
+async function deleteAccount() {
+  const msg = document.getElementById('msg');
+  const r = await fetch('/api/account', {method:'DELETE'});
+  const d = await r.json();
+  if (d.success) {
+    document.querySelector('.card').innerHTML = '<div style="padding:40px;text-align:center;"><div style="font-size:3rem;margin-bottom:20px;">✅</div><h2 style="color:#16a34a;">Account Deleted</h2><p style="margin-top:10px;color:#666;">Your account has been permanently deleted.</p><a href="/" style="display:inline-block;margin-top:24px;padding:10px 28px;background:#00a070;color:#fff;border-radius:8px;text-decoration:none;">Go to Home</a></div>';
+  } else {
+    msg.className='msg error'; msg.textContent = d.message || 'Deletion failed.'; msg.style.display='block';
+  }
+}
+
+loadUser();
+</script>
+</body>
+</html>

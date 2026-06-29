@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gee.KasZsx — Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; }
+    nav {
+      background: #161b22; border-bottom: 1px solid #21262d;
+      padding: 0 28px; display: flex; align-items: center; justify-content: space-between;
+      height: 60px; position: sticky; top: 0; z-index: 10;
+    }
+    .brand { font-size: 1.25rem; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+    .brand span { color: #00c896; }
+    nav ul { list-style: none; display: flex; gap: 4px; }
+    nav ul li a {
+      color: #6e7681; text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      padding: 7px 14px; border-radius: 8px; transition: all 0.15s;
+    }
+    nav ul li a:hover { color: #e6edf3; background: #21262d; }
+    nav ul li a.active { color: #00c896; background: rgba(0,200,150,0.1); }
+    .nav-right { display: flex; align-items: center; gap: 14px; font-size: 0.82rem; color: #6e7681; }
+    .nav-balance { color: #00c896; font-weight: 700; font-size: 0.9rem; }
+    .logout-btn {
+      padding: 6px 14px; background: transparent; border: 1px solid #21262d;
+      color: #8b949e; border-radius: 8px; cursor: pointer; font-size: 0.82rem;
+      font-family: inherit; transition: all 0.15s; width: auto;
+    }
+    .logout-btn:hover { border-color: #f85149; color: #f85149; background: rgba(248,81,73,0.06); transform: none; }
+    main { flex: 1; padding: 32px 28px; max-width: 1000px; margin: 0 auto; width: 100%; }
+    .balance-card {
+      background: linear-gradient(135deg, #00c896 0%, #00a070 100%);
+      color: #fff; border-radius: 20px; padding: 32px 36px;
+      margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 12px 40px rgba(0,200,150,0.25);
+      position: relative; overflow: hidden;
+    }
+    .balance-card::before {
+      content: ''; position: absolute; right: -30px; top: -30px;
+      width: 180px; height: 180px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+    .balance-card::after {
+      content: ''; position: absolute; right: 60px; bottom: -50px;
+      width: 130px; height: 130px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .balance-card .label { font-size: 0.82rem; opacity: 0.8; margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }
+    .balance-card .amount { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; }
+    .balance-card .user-name { font-size: 0.9rem; opacity: 0.85; margin-top: 10px; font-weight: 500; }
+    .balance-card .card-icon { font-size: 3.5rem; opacity: 0.25; position: relative; z-index: 1; }
+    .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+    .action-btn {
+      background: #161b22; border: 1px solid #21262d; border-radius: 14px; padding: 20px 14px;
+      text-align: center; text-decoration: none; color: #e6edf3;
+      transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .action-btn:hover { border-color: #00c896; background: rgba(0,200,150,0.05); transform: translateY(-2px); }
+    .action-btn .icon { font-size: 1.6rem; }
+    .action-btn span { font-size: 0.82rem; font-weight: 600; color: #8b949e; }
+    .section-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 14px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.8px; }
+    .tx-card { background: #161b22; border: 1px solid #21262d; border-radius: 14px; overflow: hidden; }
+    .tx-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-bottom: 1px solid #21262d;
+      transition: background 0.1s;
+    }
+    .tx-item:last-child { border-bottom: none; }
+    .tx-item:hover { background: rgba(255,255,255,0.02); }
+    .tx-left { display: flex; align-items: center; gap: 12px; }
+    .tx-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;
+    }
+    .tx-icon.in { background: rgba(0,200,150,0.12); color: #00c896; }
+    .tx-icon.out { background: rgba(248,81,73,0.12); color: #f85149; }
+    .tx-desc { font-size: 0.88rem; font-weight: 600; color: #e6edf3; }
+    .tx-date { font-size: 0.74rem; color: #6e7681; margin-top: 2px; }
+    .tx-amount { font-size: 0.95rem; font-weight: 700; }
+    .tx-amount.in { color: #00c896; }
+    .tx-amount.out { color: #f85149; }
+    .empty { text-align: center; color: #484f58; padding: 40px 0; font-size: 0.88rem; }
+    footer { background: #161b22; border-top: 1px solid #21262d; color: #484f58; text-align: center; padding: 14px; font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="brand">Gee.<span>KasZsx</span></div>
+  <ul>
+    <li><a href="/dashboard" class="active">Dashboard</a></li>
+    <li><a href="/cashin">Cash In</a></li>
+    <li><a href="/cashout">Cash Out</a></li>
+    <li><a href="/inbox">History</a></li>
+    <li><a href="/barcode">My QR</a></li>
+    <li><a href="/profile">Profile</a></li>
+  </ul>
+  <div class="nav-right">
+    <span>₱<span class="nav-balance" id="nav-balance">0.00</span></span>
+    <span id="nav-name" style="color:#8b949e"></span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+<main>
+  <div class="balance-card">
+    <div>
+      <div class="label">Available Balance</div>
+      <div class="amount">₱<span id="balance">0.00</span></div>
+      <div class="user-name" id="fullname-display">Welcome!</div>
+    </div>
+    <div class="card-icon">💳</div>
+  </div>
+  <div class="quick-actions">
+    <a href="/cashin" class="action-btn"><div class="icon">⬇️</div><span>Cash In</span></a>
+    <a href="/cashout" class="action-btn"><div class="icon">⬆️</div><span>Cash Out</span></a>
+    <a href="/inbox" class="action-btn"><div class="icon">📋</div><span>History</span></a>
+    <a href="/barcode" class="action-btn"><div class="icon">⬛</div><span>My QR</span></a>
+  </div>
+  <div class="section-title">Recent Transactions</div>
+  <div class="tx-card" id="tx-list">
+    <div class="empty">Loading...</div>
+  </div>
+</main>
+<footer>&copy; 2025 Gee.KasZsx — Secure Digital Payments</footer>
+<script>
+async function logout() { await fetch('/api/logout', { method: 'POST' }); window.location.href = '/'; }
+function fmt(dt) { return new Date(dt).toLocaleString('en-PH', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+async function loadDashboard() {
+  const r = await fetch('/api/me');
+  if (!r.ok) { window.location.href = '/'; return; }
+  const u = await r.json();
+  document.getElementById('balance').textContent = parseFloat(u.balance).toFixed(2);
+  document.getElementById('nav-balance').textContent = parseFloat(u.balance).toFixed(2);
+  document.getElementById('nav-name').textContent = u.fullName;
+  document.getElementById('fullname-display').textContent = 'Welcome, ' + u.fullName + '!';
+  const tr = await fetch('/api/transactions');
+  const txs = await tr.json();
+  const list = document.getElementById('tx-list');
+  if (!txs.length) { list.innerHTML = '<div class="empty">No transactions yet</div>'; return; }
+  list.innerHTML = txs.slice(0, 10).map(tx => {
+    const isIn = tx.type === 'CASH_IN';
+    const cls = isIn ? 'in' : 'out';
+    const sign = isIn ? '+' : '-';
+    const icon = isIn ? '↓' : '↑';
+    return `<div class="tx-item">
+      <div class="tx-left">
+        <div class="tx-icon ${cls}">${icon}</div>
+        <div>
+          <div class="tx-desc">${tx.description || tx.type}</div>
+          <div class="tx-date">${fmt(tx.createdAt)} · ${tx.referenceNo}</div>
+        </div>
+      </div>
+      <div class="tx-amount ${cls}">${sign}₱${parseFloat(tx.amount).toFixed(2)}</div>
+    </div>`;
+  }).join('');
+}
+loadDashboard();
+</script>
+</body>
+</html>
