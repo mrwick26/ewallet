@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gee.KasZsx — Sign Up</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0d1117;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      position: relative; overflow: hidden;
+    }
+    body::before {
+      content: ''; position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,200,150,0.12) 0%, transparent 70%);
+      top: -100px; right: -100px; border-radius: 50%;
+    }
+    .card {
+      background: #161b22; border: 1px solid #21262d;
+      border-radius: 20px; padding: 40px 36px;
+      width: 100%; max-width: 440px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+      position: relative; z-index: 1;
+    }
+    .logo { text-align: center; margin-bottom: 28px; }
+    .logo-mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, #00c896, #00a876);
+      border-radius: 14px; font-size: 1.5rem; margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0,200,150,0.35);
+    }
+    .logo h1 { font-size: 1.5rem; font-weight: 800; color: #fff; }
+    .logo h1 span { color: #00c896; }
+    .logo p { color: #6e7681; font-size: 0.82rem; margin-top: 4px; }
+    label { font-size: 0.78rem; font-weight: 600; color: #8b949e; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .input-wrap { position: relative; margin-bottom: 14px; }
+    .input-wrap .icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; }
+    input {
+      width: 100%; padding: 12px 13px 12px 40px;
+      background: #0d1117; border: 1.5px solid #21262d;
+      border-radius: 10px; font-size: 0.92rem; color: #e6edf3;
+      outline: none; transition: border-color 0.2s; font-family: inherit;
+    }
+    input:focus { border-color: #00c896; }
+    input::placeholder { color: #484f58; }
+    button {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, #00c896, #00a876);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 0.98rem; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: opacity 0.2s, transform 0.1s;
+      margin-top: 4px;
+    }
+    button:hover { opacity: 0.92; transform: translateY(-1px); }
+    .msg { margin-top: 12px; text-align: center; font-size: 0.85rem; padding: 10px 14px; border-radius: 8px; }
+    .msg.error { background: rgba(248,81,73,0.12); color: #f85149; border: 1px solid rgba(248,81,73,0.2); }
+    .msg.success { background: rgba(0,200,150,0.1); color: #00c896; border: 1px solid rgba(0,200,150,0.2); }
+    .footer-link { text-align: center; margin-top: 18px; font-size: 0.85rem; color: #6e7681; }
+    .footer-link a { color: #00c896; font-weight: 600; text-decoration: none; }
+    .pin-hint { font-size: 0.75rem; color: #484f58; margin-top: -10px; margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-mark">💸</div>
+    <h1>Gee.<span>KasZsx</span></h1>
+    <p>Create your free account</p>
+  </div>
+  <label>Full Name</label>
+  <div class="input-wrap">
+    <span class="icon">👤</span>
+    <input type="text" id="fullName" placeholder="Juan dela Cruz" />
+  </div>
+  <label>Email Address</label>
+  <div class="input-wrap">
+    <span class="icon">✉️</span>
+    <input type="email" id="email" placeholder="your@email.com" />
+  </div>
+  <label>Phone Number</label>
+  <div class="input-wrap">
+    <span class="icon">📱</span>
+    <input type="tel" id="phone" placeholder="+63 9XX XXX XXXX" />
+  </div>
+  <label>PIN (4-6 digits)</label>
+  <div class="input-wrap">
+    <span class="icon">🔐</span>
+    <input type="password" id="pin" placeholder="Enter PIN" maxlength="6" inputmode="numeric" />
+  </div>
+  <p class="pin-hint">Use 4 to 6 numeric digits</p>
+  <label>Confirm PIN</label>
+  <div class="input-wrap">
+    <span class="icon">🔐</span>
+    <input type="password" id="confirmPin" placeholder="Confirm PIN" maxlength="6" inputmode="numeric" />
+  </div>
+  <button onclick="register()">Create Account</button>
+  <div class="msg" id="msg" style="display:none"></div>
+  <div class="footer-link">Already have an account? <a href="/">Login</a></div>
+</div>
+<script>
+async function register() {
+  const fullName = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const pin = document.getElementById('pin').value;
+  const confirmPin = document.getElementById('confirmPin').value;
+  const msg = document.getElementById('msg');
+  msg.style.display = 'none';
+  if (!fullName || !email || !phone || !pin) {
+    msg.className='msg error'; msg.textContent='All fields are required.'; msg.style.display='block'; return;
+  }
+  if (!/^\d{4,6}$/.test(pin)) {
+    msg.className='msg error'; msg.textContent='PIN must be 4-6 digits.'; msg.style.display='block'; return;
+  }
+  if (pin !== confirmPin) {
+    msg.className='msg error'; msg.textContent='PINs do not match.'; msg.style.display='block'; return;
+  }
+  const fd = new FormData();
+  fd.append('fullName', fullName);
+  fd.append('email', email);
+  fd.append('phone', phone);
+  fd.append('pin', pin);
+  const r = await fetch('/api/register', { method: 'POST', body: fd });
+  const d = await r.json();
+  if (d.success) {
+    msg.className='msg success'; msg.textContent='✓ Account created! Redirecting to login...'; msg.style.display='block';
+    setTimeout(() => window.location.href = '/', 1200);
+  } else {
+    msg.className='msg error'; msg.textContent = d.message || 'Registration failed.'; msg.style.display='block';
+  }
+}
+</script>
+</body>
+</html>
